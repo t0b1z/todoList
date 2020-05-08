@@ -1,0 +1,91 @@
+body{
+    font-family: FFMarkWebProHeavy, "Helvetica Neue", Helvetica, Arial, sans-serif;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+#content{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.ListTabs{
+    width: 600px;
+    display: flex;
+    flex-direction: row;
+    padding-left: 10px;
+    padding-right: 10px;
+}
+
+.TabButton{
+    height: 30px;
+    background: darkgrey;
+    cursor: pointer;
+    outline: none;
+    border : 1px solid black;
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+    border-bottom: none;
+}
+
+.TabButton.title{
+    width: 70px;
+    border-left: none;
+    border-top-left-radius: 0px;
+}
+
+.TabButton.rem{
+    width: 30px;
+    border-right: none;
+    border-top-right-radius: 0px;
+
+}
+
+.TabButton.new{
+    width: 30px;
+    background: lightgrey;
+}
+
+.active > .TabButton{
+    background: white;
+}
+
+.ToDoList{
+    width: max-content;
+    border-top: 1px solid black;
+    border-left: 1px solid black;
+
+}
+
+.ToDoItem{
+    display: grid;
+    grid-template-columns: 200px 200px 100px 50px 50px;
+}
+
+.ToDoItem > div, input{
+    padding: 10px;
+    border-right: 1px solid black;
+    border-bottom: 1px solid black;
+}
+
+.ToDoItem > input {
+
+}
+
+.RemoveButton {
+    height: 20px;
+    width: 20px;
+    border: none;
+    cursor: pointer;
+    border-radius: 100%;
+}
+
+.AddNewButton {
+    height: 20px;
+    width: 20px;
+    border-radius: 10px;
+    border: none;
+}
