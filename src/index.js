@@ -9,7 +9,7 @@ let todoLists = undefined
 
 // FUNCTIONS
 
-function generateTabButton(todoList) {
+function generateListTabButton(todoList) {
     let div = $('<div>')
 
     let button = $('<button/>',
@@ -67,7 +67,7 @@ function render(activeTodoList){
     tabBar.empty()
 
     todoLists.forEach((todoList, index) => {
-        let tabButton = generateTabButton(todoList)
+        let tabButton = generateListTabButton(todoList)
         if(todoList === activeTodoList){
             tabButton.addClass("active")
         }
