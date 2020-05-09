@@ -4,7 +4,7 @@ function createTodoList(title){
 
 function TodoList(title){
     let list = []
-    this.title = title
+    let _title = title
 
     function addTodoItem(todoItem){
         logMsg("Adding item \"" + todoItem.title + "\" to list")
@@ -35,11 +35,11 @@ function TodoList(title){
     }
 
     function getTitle(){
-        return title
+        return _title
     }
 
     function setTitle(title){
-        this.title = title
+        _title = title
     }
 
     return {addTodoItem, removeTodoItem, printList, getList, getTitle, setTitle}

@@ -1,158 +1,60 @@
-import {createTodoList} from './todoList'
-import {createTodoItem} from "./todoItem";
+import {createTodoList} from './ToDoList/todoList'
+import {createTodoItem} from "./ToDoList/todoItem";
 import $ from 'jquery'
 import {storage} from './localStorage'
-import {todoListSerializer} from "./todoListSerializer";
+import {todoListSerializer} from "./ToDoList/todoListSerializer";
+import {todoListRenderer} from "./ToDoList/todoListRenderer";
+import {tabBarRenderer} from "./TabBar/tabBarRenderer";
+import {createTabBar} from "./TabBar/tabBar";
+import {createTabBarItem} from "./TabBar/tabBarItem";
 
 // VARIABLES
-let todoLists = undefined
+let todoLists = []
+let tabBar = createTabBar()
 
 // FUNCTIONS
 
-function generateListTabButton(todoList) {
-    let div = $('<div>')
-
-    let button = $('<button/>',
-        {
-            text: todoList.getTitle(),
-            "class": "TabButton title",
-            click: (e) => {
-                render(todoList)
-            }
-        });
-
-    let remButton = $('<button/>',
-        {
-            text: "x",
-            "class": "TabButton rem",
-            click: (e) => {
-                todoLists = todoLists.filter( (value => {
-                    return value != todoList
-                }))
-
-                if(todoLists.length === 0){
-                    todoLists.push(createTodoList("List"))
-                }
-
-                render(todoLists[todoLists.length-1])
-                saveLists()
-            }
-        });
-
-    div.append(remButton)
-    div.append(button)
-
-    return div;
-}
-
-function generateNewTabButton() {
-    let button = $('<button/>',
-        {
-            text: "+",
-            "class": "TabButton new",
-            click: (event) => {
-                todoLists.push(createTodoList("List"))
-                render(todoLists[todoLists.length-1])
-            }
-        });
-    return button;
-}
-
-function render(activeTodoList){
-    console.log("rendering page...")
-    let listDOM = $("div.ToDoList")
-    listDOM.empty()
-
-    let tabBar = $("div.ListTabs")
-    tabBar.empty()
-
-    todoLists.forEach((todoList, index) => {
-        let tabButton = generateListTabButton(todoList)
-        if(todoList === activeTodoList){
-            tabButton.addClass("active")
-        }
-        tabBar.append(tabButton)
-    })
-
-    let newTabButton = generateNewTabButton()
-    tabBar.append(newTabButton)
-
-    activeTodoList.getList().forEach(
-        (value, index) => {
-
-            let item = generateToDoItemDOM(activeTodoList, value, index);
-            listDOM.append(item)
-        })
-
-    let newItemRow = generateNewItemRowDOM(activeTodoList)
-    listDOM.append(newItemRow)
-
-}
-
-function generateToDoItemDOM(todoList, value, index) {
-    let item = $("<div>").addClass("ToDoItem")
-
-    item.append($('<div>' + value.title + '</div>'))
-    item.append($('<div>' + value.description + '</div>'))
-    item.append($('<div>' + value.date + '</div>'))
-    item.append($('<div>' + value.priority + '</div>'))
-
-    let remButtonDiv = $('<div>')
-    let remButton = $('<button/>',
-        {
-            text: 'x',
-            "class": "RemoveButton",
-            click: () => {
-                todoList.removeTodoItem(index)
-                saveLists()
-                render(todoList)
-            }
-        });
-
-    remButtonDiv.append(remButton)
-    item.append(remButtonDiv)
-    return item;
-}
-
-function generateNewItemRowDOM(todoList){
-    let item = $("<div>").addClass("ToDoItem")
-
-    item.append($('<input id="inTitle" placeholder="Title"/>'))
-    item.append($('<input id="inDesc" placeholder="Description"/>'))
-    item.append($('<input id="inDate" placeholder="Date"/>'))
-    item.append($('<input id="inPrio" placeholder="Prio"/>'))
-
-    let addButtonDiv = $('<div>')
-    let addButton = $('<button/>',
-        {
-            text: '+',
-            "class": "AddNewButton",
-            click: () => {
-                let title = document.getElementById("inTitle").value
-                let desc = document.getElementById("inDesc").value
-                let date = document.getElementById("inDate").value
-                let prio = document.getElementById("inPrio").value
-                let item = createTodoItem(title, desc, date, prio)
-                todoList.addTodoItem(item)
-                saveLists()
-                render(todoList)
-            }
-        });
-
-    addButtonDiv.append(addButton)
-    item.append(addButtonDiv)
-
-    return item
-}
-
 function saveLists() {
+    console.log("Saving: " + todoLists)
     let storageString = todoListSerializer.serialize(todoLists)
+    console.log(storageString)
     storage.save("lists", storageString)
 }
 
 function handleLoad(string) {
     todoLists = todoListSerializer.deserialize(string)
     todoLists = todoLists ? todoLists : [createTodoList("List")]
+}
+
+function addNewTab(event, data){
+    console.log("Add new tab in index called...!")
+    todoLists.push(createTodoList("New"))
+    tabBar.addTab(createTabBarItem(todoLists[todoLists.length-1].getTitle()))
+    tabBarRenderer.render(tabBar)
+    saveLists()
+}
+
+function switchToTab(event, data){
+    todoListRenderer.render(todoLists[data])
+}
+
+function removeTab(event, data){
+    let index = data[0]
+    let tabItem = data[1]
+    todoLists = todoLists.filter((value, _index) => {return _index !== index})
+    tabBar.removeTab(tabItem)
+    tabBarRenderer.render(tabBar)
+    saveLists()
+}
+
+function updateTitle(event, data) {
+    console.log("Label changed", data)
+    let index = data[0]
+    let title = data[1]
+    todoLists[index].setTitle(title)
+    console.log(todoLists)
+    tabBar.getTabs()[index].setLabel(title)
+    saveLists()
 }
 
 // INIT
@@ -165,5 +67,17 @@ $( document ).ready(function() {
 
     storage.load("lists", handleLoad);
 
-    render(todoLists[0])
+    todoLists.forEach( (list) => {
+        tabBar.addTab(createTabBarItem(list.getTitle()))
+    } )
+
+    tabBarRenderer.addObserver("NEW_CLK", addNewTab)
+    tabBarRenderer.addObserver("TAB_CLK", switchToTab)
+    tabBarRenderer.addObserver("REM_CLK", removeTab)
+    tabBarRenderer.addObserver("EDIT", updateTitle)
+
+    todoListRenderer.addObserver("UPDATE", saveLists)
+
+    tabBarRenderer.render(tabBar)
+    todoListRenderer.render(todoLists[0])
 });

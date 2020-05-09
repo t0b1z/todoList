@@ -39,19 +39,18 @@ body{
 
 .TabButton.rem{
     width: 30px;
-    border-right: none;
-    border-top-right-radius: 0px;
-
+    border: none;
 }
 
 .TabButton.new{
     width: 30px;
     background: lightgrey;
 }
-
+/*
 .active > .TabButton{
     background: white;
 }
+ */
 
 .ToDoList{
     width: max-content;
@@ -65,10 +64,27 @@ body{
     grid-template-columns: 200px 200px 100px 50px 50px;
 }
 
-.ToDoItem > div, input{
+.ToDoItem > div{
     padding: 10px;
     border-right: 1px solid black;
     border-bottom: 1px solid black;
+}
+
+.ToDoItem > input {
+    padding: 10px;
+    border-right: 1px solid black;
+    border-bottom: 1px solid black;
+}
+
+.TabButton .container{
+    background-color: darkgray;
+}
+
+.TabLabel{
+    border: none;
+    width: 50px;
+    background-color: darkgrey;
+    padding-left: 10px;
 }
 
 .ToDoItem > input {
