@@ -64,6 +64,18 @@ body{
     grid-template-columns: 200px 200px 100px 50px 50px;
 }
 
+#inTitle, #inDesc{
+    width:170px
+}
+
+#inDate{
+    width: 70px;
+}
+
+#inPrio{
+    width: 22px;
+}
+
 .ToDoItem > div{
     padding: 10px;
     border-right: 1px solid black;
@@ -85,10 +97,6 @@ body{
     width: 50px;
     background-color: darkgrey;
     padding-left: 10px;
-}
-
-.ToDoItem > input {
-
 }
 
 .RemoveButton {
