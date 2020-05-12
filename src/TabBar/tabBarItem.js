@@ -3,16 +3,16 @@ function createTabBarItem(label) {
 }
 
 function TabBarItem(label){
-    this.label = label;
+    let _label = label;
     let _isActive = false
     let _isEditable = false
 
     function getLabel() {
-        return label
+        return _label
     }
 
     function setLabel(label){
-        this.label = label
+        _label = label
     }
 
     function isActive() {

@@ -33,10 +33,10 @@ export let todoListRenderer = (function() {
     function generateNewItemRowDOM(todoList){
         let item = $("<div>").addClass("ToDoItem")
 
-        item.append($('<input id="inTitle" placeholder="Title"/>'))
-        item.append($('<input id="inDesc" placeholder="Description"/>'))
-        item.append($('<input id="inDate" placeholder="Date"/>'))
-        item.append($('<input id="inPrio" placeholder="Prio"/>'))
+        item.append($("<div>").append($('<input id="inTitle" placeholder="Title"/>')))
+        item.append($("<div>").append($('<input id="inDesc" placeholder="Description"/>')))
+        item.append($("<div>").append($('<input id="inDate" placeholder="Date"/>')))
+        item.append($("<div>").append($('<input id="inPrio" placeholder="Prio"/>')))
 
         let addButtonDiv = $('<div>')
         let addButton = $('<button/>',

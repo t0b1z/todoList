@@ -23,7 +23,8 @@ function saveLists() {
 
 function handleLoad(string) {
     todoLists = todoListSerializer.deserialize(string)
-    todoLists = todoLists ? todoLists : [createTodoList("List")]
+    console.log(string, todoLists.length)
+    todoLists = todoLists.length !== 0 ? todoLists : [createTodoList("New")]
 }
 
 function addNewTab(event, data){
@@ -52,8 +53,10 @@ function updateTitle(event, data) {
     let index = data[0]
     let title = data[1]
     todoLists[index].setTitle(title)
-    console.log(todoLists)
-    tabBar.getTabs()[index].setLabel(title)
+
+    let tab = tabBar.getTab(index)
+    tab.setLabel(title)
+    tabBar.setTab(index, tab)
     saveLists()
 }
 

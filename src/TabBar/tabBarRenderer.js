@@ -28,6 +28,7 @@ export let tabBarRenderer = (function() {
                 "class" : "TabLabel"
             }
         ).change( (event) => {
+            console.log("Label field changed...")
             fireEvent("EDIT", [index, event.target.value])
         })
 
@@ -37,18 +38,6 @@ export let tabBarRenderer = (function() {
                 "class": "TabButton rem",
                 click: (e) => {
                     fireEvent("REM_CLK", [index, tabItem])
-                    /*
-                    todoLists = todoLists.filter( (value => {
-                        return value != todoList
-                    }))
-
-                    if(todoLists.length === 0){
-                        todoLists.push(createTodoList("List"))
-                    }
-
-                    render(todoLists[todoLists.length-1])
-                    saveLists()
-                    */
                 }
             });
 
